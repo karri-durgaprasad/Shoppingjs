@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* Header Styling */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            padding: 20px 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-title {
+            font-family: 'Arial', sans-serif;
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .button {
+            padding: 12px 25px;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #333;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .button i {
+            margin-right: 8px;
+        }
+
+        /* Main content styling */
+        .child {
+            height: 350px;
+            width: 250px;
+            position: relative;
+            border: solid black 1px;
+            border-radius: 5px;
+            margin: 30px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 0;
+            top: 170px;
+        }
+
+        .child:hover {
+            transform: scale(1.1);
+        }
+
+        .button-cart {
+            position: absolute;
+            bottom: 14px;
+            left: 25%;
+            border: none;
+            border: solid black 1px;
+            padding: 6px;
+            padding-left: 15px;
+            padding-right: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button {
+            transition: transform 0.3s;
+        }
+
+        .button:active {
+            transform: scale(0.9);
+        }
+
+        /* Container for the products */
+        #demo {
+            display: flex;
+            flex-wrap: wrap;
+            padding-left: 130px;
+            padding-bottom: 200px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px 10px;
+            }
+
+            .header-title {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+        }
+    </style>
+  
+</head>
+<body>
+    
+    <!-- Header Section -->
+    <div class="header">
+        <h1 class="header-title">Premium Apparel Collection</h1>
+        <div class="header-buttons">
+            <button class="button" onclick="add()">
+                <i class="fas fa-shopping-cart" id="cartdis"></i> CART
+            </button>
+            <button class="button" onclick="sum()">GO HOME</button>
+        </div>
+    </div>
+     
+    <!-- Product Container -->
+    <div id="demo"></div>
+
+    <script>
+        // Navigate to Home
+        function sum() {
+            location.href = "index.html";
+        }
+
+        // Navigate to Cart Page
+        function add() {
+            location.href = "Cart.html";
+        }
+
+        // Men's Products Data
+        const MenProduct = [
+            { image: 'https://img.freepik.com/free-photo/smiling-lady-model-short-blue-dress-hat-barfoot-white_231208-4357.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid', brand: 'shortblue dress', model: 'Allen solly', price: 1000, id: 1 },
+            { image: "https://www.shutterstock.com/shutterstock/photos/2443171009/display_1500/stock-photo-portrait-of-man-in-beige-jacket-and-shirt-with-sunglasses-holding-jacket-in-hand-on-beige-backdrop-2443171009.jpg", brand: 'shirt', model: 'full color', price: 1500, id: 2 },
+            { image: "https://img.freepik.com/free-photo/beautiful-mature-woman-posing-with-fashion-clothes_144627-47234.jpg?t=st=1733846785~exp=1733850385~hmac=d46b8b1a357e1791f43e60273330407cb0e197ccf8bfad6c61bbf242b51fb125&w=360", brand: 'posing with fashion clothes', model: 'Twills', price: 1300, id: 3 },
+            { image: "https://img.freepik.com/premium-photo/thinking-corporate-business-man-studio-solution-startup-development-ideas-gray-background-professional-thoughtful-person-problem-solving-confidence-consulting-plan_590464-439562.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid", brand: 'shirt', model: 'full color', price: 1500, id: 4 },
+            { image: "https://img.freepik.com/free-photo/beautiful-girl-street_1157-4709.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid", brand: 'White dress', model: 'Raymond', price: 1000, id: 5 },
+            { image: "https://img.freepik.com/free-photo/portrait-handsome-smiling-stylish-young-man-model-wearing-jeans-clothes-sunglasses-fashion-man_158538-5023.jpg?semt=ais_hybrid-rr-similar", brand: 'shirt', model: 'full color', price: 1800, id: 6 },
+            { image: "https://img.freepik.com/free-photo/portrait-handsome-confident-stylish-hipster-lambersexual-model_158538-17999.jpg?semt=ais_hybrid-rr-similar", brand: 'shirt', model: 'full color', price: 1900, id: 7 },
+            { image: "https://img.freepik.com/free-photo/stylish-woman-spending-time-summer-field_1157-36070.jpg?t=st=1733847080~exp=1733850680~hmac=cdd24d89e51cba3c5f50c08a6577c5313d1ebe95396b1f5062c41d9be3cda35e&w=360", brand: 'Shirtdress', model: 'MAX', price: 2400, id: 8 },
+            { image: "https://img.freepik.com/premium-photo/young-fashion-model_146671-5606.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid", brand: 'BODYCON Dress', model: 'Levis', price: 1000, id: 9 },
+            { image: "https://img.freepik.com/free-photo/beautiful-woman-purple-sweater-skirt_1303-17489.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid", brand: 'Shift Dress', model: 'Raymond', price: 2200, id: 10 },
+            { image: "https://img.freepik.com/free-photo/stylish-woman-summer-outfit-isolated-posing-fashion-trend-isolated_285396-2983.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid", brand: 'Maxy Dress', model: 'BIBA', price: 2000, id: 11 },
+            { image: "https://img.freepik.com/free-photo/woman-looking-her-skirt_1187-1694.jpg?ga=GA1.1.1595632184.1728574072&semt=ais_hybrid", brand: 'Wrap Dresses', model: 'H&M Zara', price: 2700, id: 12 },
+            { image: "https://img.freepik.com/free-photo/portrait-handsome-young-model-man-dressed-jeans-clothes-posing-near-white-textured-wall_158538-7028.jpg?semt=ais_hybrid-rr-similar", brand: 'shirt', model: 'full color', price: 2900, id: 13 },
+            { image: "https://img.freepik.com/free-photo/portrait-handsome-fashion-stylish-hipster-businessman-model-dressed-elegant-brown-suit-sunglasses_158538-11326.jpg?semt=ais_hybrid-rr-similar", brand: 'shirt', model: 'full color', price: 3100, id: 14 },
+            { image: "https://img.freepik.com/premium-photo/mens-fashion_1246590-7306.jpg?semt=ais_hybrid-rr-similar", brand: 'shirt', model: 'full color', price: 3500, id: 15 },
+            { image: "https://img.freepik.com/free-photo/pensive-man-with-hat-looking-down_1153-1449.jpg?semt=ais_hybrid-rr-similar", brand: 'shirt', model: 'full color', price: 4000, id: 16 }
+        ];
+
+        let Html = '';
+        MenProduct.map((item) => {
+            Html += `
+                <div class="child">
+                    <div class="inner-child">
+                        <img src="${item.image}" width="250px" height="225px">
+                    </div>
+                    <h3 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">${item.brand}</h3>
+                    <h3 style="text-align: center; margin-top: 0px; margin-bottom: 0px;">Model: ${item.model}</h3>
+                    <h3 style="text-align: center; margin-top: 0px;" class="box" data-value="2399">₹${item.price}</h3>
+                    <button class="button-cart" data-id="${item.id}">ADD TO CART</button>
+                </div>
+            `;
+        });
+        document.getElementById("demo").innerHTML = Html;
+
+        // Initialize cart from localStorage or set it as an empty array if nothing is stored
+        let Cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Listen to add to cart button click
+        document.querySelectorAll('.button-cart').forEach((button) => {
+            button.addEventListener('click', () => {
+                const productId = button.dataset.id;
+                const product = MenProduct.find(item => item.id == productId); // Find the clicked product by its ID
+
+                if (product) {
+                    // Check if the product already exists in the cart
+                    let existingItem = Cart.find(item => item.id === product.id);
+
+                    if (existingItem) {
+                        // If the product exists, increment the quantity
+                        existingItem.quantity += 1;
+                    } else {
+                        // If not, add the product to the cart with a quantity of 1
+                        Cart.push({ ...product, quantity: 1 });
+                    }
+
+                    // Save the updated cart in localStorage
+                    localStorage.setItem('cart', JSON.stringify(Cart));
+
+                    // Update cart icon with total quantity
+                    let totalQuantity = Cart.reduce((sum, item) => sum + item.quantity, 0);
+                    document.getElementById('cartdis').innerHTML = totalQuantity;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

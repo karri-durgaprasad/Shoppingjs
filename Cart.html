@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* General styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .cart-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .cart-header button {
+            padding: 10px 20px;
+            border: 2px solid #333;
+            background-color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-left: 20px;
+        }
+
+        .cart-header button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px; /* Spacing between products horizontally and vertically */
+            padding: 20px;
+        }
+
+        /* Product item container */
+        .child {
+            width: 250px;
+            height: auto;
+            position: relative;
+            border: solid 1px #333;
+            border-radius: 5px;
+            overflow: hidden;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        /* Image inside product */
+        .child img {
+            width: 100%;
+            height: 225px;
+            object-fit: cover;
+        }
+
+        /* Product information */
+        .child h3 {
+            text-align: center;
+            margin: 5px 0;
+        }
+
+        /* Price */
+        .child .price {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Add to Cart button */
+        .child .button-cart {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .child .button-cart:hover {
+            background-color: #218838;
+        }
+
+        /* Remove button */
+        .remove-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .remove-btn:hover {
+            background-color: darkred;
+        }
+
+        /* Quantity Select Box */
+        .quantity-select {
+            width: 100%;
+            padding: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* Total Section */
+        .total-container {
+            text-align: center;
+            width: 100%;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border: 2px solid #333;
+            border-radius: 5px;
+            font-size: 20px;
+        }
+
+        .total-container h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .total-container .total-amount {
+            font-weight: bold;
+            font-size: 26px;
+            color: #28a745;
+        }
+
+        .checkout-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cart Header -->
+    <div class="cart-header">
+        <h1>Your Cart</h1>
+        <button onclick="location.href='Items.html'">Continue Shopping</button>
+    </div>
+
+    <!-- Cart Container -->
+    <div id="cart-container" class="cart-container">
+        <!-- Cart Items will be inserted here dynamically -->
+    </div>
+
+    <!-- Total Section -->
+    <div class="total-container" id="total-container">
+        <!-- Total will be inserted here dynamically -->
+    </div>
+
+    <script>
+        // Sample Cart Data (can be fetched from localStorage)
+        const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Function to display the cart items
+        function displayCart() {
+            let cartHtml = '';
+
+            // If the cart is empty
+            if (cartItems.length === 0) {
+                cartHtml = '<p style="text-align:center; width:100%;">Your cart is empty!</p>';
+            } else {
+                // Loop through the cart items
+                cartItems.forEach(item => {
+                    cartHtml += `
+                        <div class="child">
+                            <img src="${item.image}" alt="${item.brand} ${item.model}">
+                            <h3>Brand: ${item.brand}</h3>
+                            <h3>Model: ${item.model}</h3>
+                            <h3 class="price">$${item.price}</h3>
+                            <select class="quantity-select" onchange="updateQuantity(${item.id}, this.value)">
+                                ${generateQuantityOptions(item.quantity)}
+                            </select>
+                            <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                        </div>
+                    `;
+                });
+            }
+
+            // Insert the cart items into the container
+            document.getElementById('cart-container').innerHTML = cartHtml;
+
+            // Display the total amount
+            displayTotal();
+        }
+
+        // Function to generate quantity options
+        function generateQuantityOptions(quantity) {
+            let options = '';
+            for (let i = 1; i <= 10; i++) {
+                options += `<option value="${i}" ${i === quantity ? 'selected' : ''}>${i}</option>`;
+            }
+            return options;
+        }
+
+        // Function to update the quantity of an item
+        function updateQuantity(id, quantity) {
+            // Find the item in the cart
+            const item = cartItems.find(item => item.id === id);
+            if (item) {
+                // Update the quantity
+                item.quantity = parseInt(quantity);
+                // Save the updated cart to localStorage
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+            }
+
+            // Re-display the cart and total after the update
+            displayCart();
+        }
+
+        // Function to remove an item from the cart
+        function removeItem(id) {
+            // Find the index of the item to be removed
+            const itemIndex = cartItems.findIndex(item => item.id === id);
+
+            if (itemIndex !== -1) {
+                // Remove the item from the cart
+                cartItems.splice(itemIndex, 1);
+                // Update the cart in localStorage
+                localStorage.setItem('cart', JSON.stringify(cartItems));
+                // Re-display the cart
+                displayCart();
+            }
+        }
+
+        // Function to calculate and display the total amount
+        function displayTotal() {
+            let totalAmount = 0;
+
+            // Loop through the cart items and calculate the total
+            cartItems.forEach(item => {
+                totalAmount += item.price * item.quantity;
+            });
+
+            // Insert the total into the total container
+            const totalContainer = document.getElementById('total-container');
+            if (cartItems.length > 0) {
+                totalContainer.innerHTML = `
+                    <h2>Total Amount</h2>
+                    <p class="total-amount">$${totalAmount.toFixed(2)}</p>
+                    <button class="checkout-btn">Proceed to Checkout</button>
+                `;
+            } else {
+                totalContainer.innerHTML = '';  // Empty if no items
+            }
+        }
+
+        // Display the cart items when the page loads
+        window.onload = displayCart;
+
+    </script>
+</body>
+</html>
